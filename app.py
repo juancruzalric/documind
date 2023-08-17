@@ -36,8 +36,8 @@ def get_text_chunks(text):
     return chunks
 
 def get_vectorstore(chunks):
-  embeddings = OpenAIEmbeddings()
-  #embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+  #embeddings = OpenAIEmbeddings()
+  embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
   vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
   return vectorstore
 
@@ -47,11 +47,11 @@ def get_conversation_chain(vectorstore):
         return_messages=True
     )
 
-    #llm = HuggingFaceHub(repo_id="google/flan-t5-base",
-    #                     model_kwargs={"temperature": 0, "max_length": 64},
-    #                     huggingfacehub_api_token=HUGGINGFACE_API_TOKEN)
+    llm = HuggingFaceHub(repo_id="google/flan-t5-base",
+                         model_kwargs={"temperature": 0, "max_length": 64},
+                         huggingfacehub_api_token=HUGGINGFACE_API_TOKEN)
 
-    llm = ChatOpenAI(model="gpt-4", temperature=0)
+    #llm = ChatOpenAI(model="gpt-4", temperature=0)
 
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
